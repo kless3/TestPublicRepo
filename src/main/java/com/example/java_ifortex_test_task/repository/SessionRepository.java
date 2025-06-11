@@ -9,9 +9,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface SessionRepository extends JpaRepository<Session, Long> {
-    @Query(value = "", nativeQuery = true)
+    @Query(value = "SELECT * FROM session WHERE device_type = :deviceType ORDER BY start_date ASC LIMIT 1", nativeQuery = true)
     Session getFirstDesktopSession(DeviceType deviceType);
 
-    @Query(value = "", nativeQuery = true)
+    @Query(value = "SELECT s.* FROM session s JOIN user u ON s.user_id = u.id WHERE u.is_active = true AND s.end_date < '2025-01-01 00:00:00' ORDER BY s.started_at_utc DESC", nativeQuery = true)
     List<Session> getSessionsFromActiveUsersEndedBefore2025(LocalDateTime endDate);
 }
